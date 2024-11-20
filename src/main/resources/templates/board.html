@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Board Table</title>
+</head>
+<body>
+<h1>Board Details</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Content</th>
+        <th>Member</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <!-- 서버에서 전달받은 Board 객체의 필드 값 표시 -->
+        <td th:text="${board.getId()}">ID</td>
+        <td th:text="${board.getContent()}">Content</td>
+        <td th:text="${board.member.getName()}">Member</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

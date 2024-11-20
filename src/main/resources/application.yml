@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/MyBoard  # 데이터베이스 URL
+    username: root                             # 데이터베이스 사용자명
+    password: twojmit99!                             # 데이터베이스 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver         # 드라이버 클래스
+  jpa:
+    hibernate:
+      #ddl-auto: update                                  # DDL 자동 실행 (create, update, validate, none)
+    show-sql: true                                      # SQL 쿼리 출력
