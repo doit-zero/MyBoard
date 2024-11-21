@@ -1,5 +1,6 @@
 package hello.myboard.service;
 
+import hello.myboard.dto.MemberDto;
 import hello.myboard.entity.Board;
 import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
@@ -16,9 +17,18 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
+    public void addMember(MemberDto memberDto) {
+        Member member = new Member(memberDto.getName(),memberDto.getPassword());
+        memberRepository.save(member);
+    }
 
     public List<Board> getBoarList(Long id) {
         Optional<Member> findMember = memberRepository.findById(id);
         return findMember.isPresent() ? findMember.get().getBoardList() : null;
     }
+
+
+//    public boolean isNameExists(){
+//        return memberRepository.exists(memberDto);
+//    }
 }

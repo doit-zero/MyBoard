@@ -1,19 +1,24 @@
 package hello.myboard.controller;
 
+import hello.myboard.dto.MemberDto;
 import hello.myboard.entity.Board;
 import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
 import hello.myboard.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
@@ -21,16 +26,32 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     @GetMapping("/members")
-    public String getMemberForm() {
+    public String getMemberForm(Model model) {
+        model.addAttribute("memberDto",new MemberDto());
         return "members/members";
     }
 
     @PostMapping("/members")
-    public String addMember(@RequestParam("name") String name, Model model) {
-        Member member = new Member(name);
-        memberRepository.save(member);
-        model.addAttribute("member", member);
-        return "members/result";
+    public String addMember(@Valid MemberDto memberDto, BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()){
+            return "members/members";
+        }
+        log.info("memberDto : {}",memberDto);
+
+        memberService.addMember(memberDto);
+        return "board/board";
+    }
+
+    @GetMapping("/login")
+    public String getLoginForm(Model model) {
+        model.addAttribute("memberDto",new MemberDto());
+        return "members/login";
+    }
+
+    @PostMapping("/login")
+    public String login(@Valid MemberDto memberDto){
+        
+        return "redirect:/home";
     }
 
     // 멤버 조회

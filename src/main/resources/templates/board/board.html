@@ -16,6 +16,22 @@
             border-bottom: 1px solid #ddd;
             background-color: #f9f9f9;
         }
+        .navbar .tabs {
+            display: flex;
+            gap: 10px;
+        }
+        .navbar .tabs button {
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+            background-color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .navbar .tabs button.active {
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+        }
         .navbar .actions {
             display: flex;
             align-items: center;
@@ -85,7 +101,13 @@
 <body>
 <h1>게시판</h1>
 <div class="navbar">
-
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="active" onclick="filterPosts('all')">전체글</button>
+        <button onclick="filterPosts('topic')">개념글</button>
+        <button onclick="filterPosts('notice')">공지</button>
+    </div>
+    <!-- Actions -->
     <div class="actions">
         <select>
             <option>50개</option>
@@ -93,7 +115,7 @@
             <option>200개</option>
         </select>
         <button class="write-button">✍ 글쓰기</button>
-        <button class="signup-button" onclick="location.href='/login'">로그인</button>
+        <button class="signup-button" onclick="location.href='/members'">회원가입</button>
     </div>
 </div>
 
@@ -102,8 +124,8 @@
     <thead>
     <tr class="sticky-header">
         <th>번호</th>
-        <th>작성자</th>
         <th>제목</th>
+        <th>글쓴이</th>
         <th>작성일</th>
         <th>조회</th>
         <th>추천</th>
@@ -111,13 +133,13 @@
     </thead>
     <tbody>
     <!-- 게시판 목록 반복 -->
-    <tr th:each="boardDto : ${boardDtoList}">
-        <td th:text="${boardDto.getId()}"></td>
-        <td th:text="${boardDto.getMember().getName()}"></td>
-        <td th:text="${boardDto.getTitle()}"></td>
-        <td th:text="${boardDto.getCreatedAt()}"></td>
-        <td th:text="${boardDto.getViews()}"></td>
-        <td th:text="${boardDto.getLikes()}"></td>
+    <tr th:each="post : ${posts}">
+        <td th:text="${post.id}"></td>
+        <td th:text="${post.title}"></td>
+        <td th:text="${post.author}"></td>
+        <td th:text="${post.date}"></td>
+        <td th:text="${post.views}"></td>
+        <td th:text="${post.recommendations}"></td>
     </tr>
     </tbody>
 </table>

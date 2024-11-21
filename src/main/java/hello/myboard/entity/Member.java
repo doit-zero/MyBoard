@@ -17,13 +17,16 @@ public class Member {
 
     private String name;
 
+    private String password;
+
     // cascade = CascadeType.ALL는 영속성 전이임 member.addBoard(borad) 시에 member와 board 모두 영속성컨텍스트에 등록되며 sql문이나감
     //orphanRemoval = true 설정은 연관된 엔티티가 고아 상태(즉, 부모 엔티티와의 관계가 끊어진 상태)가 되면 자동으로 삭제 쿼리를 발생시키는 설정
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Board> boardList;
 
-    public Member(String name) {
+    public Member(String name,String password) {
         this.name = name;
+        this.password = password;
     }
 
     // 연관관계 편의 메서드

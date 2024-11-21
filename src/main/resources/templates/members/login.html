@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>회원가입</title>
+  <title>로그인</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -77,7 +77,7 @@
 </head>
 <body>
 <div class="form-container">
-  <h2>회원가입</h2>
+  <h2>로그인</h2>
   <form action="#" th:action="@{/members}" method="post" th:object="${memberDto}">
     <div class="input-group">
       <label>회원 이름</label>
@@ -90,8 +90,8 @@
       <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     </div>
     <div class="input-group">
-      <button type="submit">가입하기</button>
-    </div>
+      <button type="submit">로그인</button>
+      <button onclick="location.href='/members'">회원가입</button>
   </form>
 </div>
 </body>
