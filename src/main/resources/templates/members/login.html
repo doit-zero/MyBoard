@@ -78,7 +78,7 @@
 <body>
 <div class="form-container">
   <h2>로그인</h2>
-  <form action="#" th:action="@{/members}" method="post" th:object="${memberDto}">
+  <form action="#" th:action="@{/login}" method="post" th:object="${loginDto}">
     <div class="input-group">
       <label>회원 이름</label>
       <input type="text" th:field="*{name}" placeholder="회원 이름을 입력하세요" required>
@@ -89,9 +89,16 @@
       <input type="password" th:field="*{password}" placeholder="비밀번호를 입력하세요" required>
       <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
     </div>
+    <!-- 클래스 레벨 오류 메시지 -->
+    <div th:if="${#fields.hasGlobalErrors()}">
+      <ul>
+        <li th:each="err : ${#fields.globalErrors()}" th:text="${err}"></li>
+      </ul>
+    </div>
     <div class="input-group">
       <button type="submit">로그인</button>
       <button onclick="location.href='/members'">회원가입</button>
+    </div>
   </form>
 </div>
 </body>

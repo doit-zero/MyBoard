@@ -78,7 +78,7 @@
 <body>
 <div class="form-container">
   <h2>회원가입</h2>
-  <form action="#" th:action="@{/members}" method="post" th:object="${memberDto}">
+  <form action="#" th:action="@{/members}" method="post" th:object="${signupDto}">
     <div class="input-group">
       <label>회원 이름</label>
       <input type="text" th:field="*{name}" placeholder="회원 이름을 입력하세요" required>

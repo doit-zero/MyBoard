@@ -1,6 +1,7 @@
 package hello.myboard.controller;
 
-import hello.myboard.dto.MemberDto;
+import hello.myboard.dto.SignupDto;
+import hello.myboard.dto.member.LoginDto;
 import hello.myboard.entity.Board;
 import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
@@ -8,9 +9,7 @@ import hello.myboard.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -26,32 +25,34 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     @GetMapping("/members")
-    public String getMemberForm(Model model) {
-        model.addAttribute("memberDto",new MemberDto());
-        return "members/members";
+    public String getSignupForm(Model model) {
+        model.addAttribute("signupDto",new SignupDto());
+        return "members/signup";
     }
 
     @PostMapping("/members")
-    public String addMember(@Valid MemberDto memberDto, BindingResult bindingResult, Model model) {
+    public String signup(@Valid SignupDto signupDto, BindingResult bindingResult, Model model) {
         if(bindingResult.hasErrors()){
-            return "members/members";
+            return "members/signup";
         }
-        log.info("memberDto : {}",memberDto);
-
-        memberService.addMember(memberDto);
-        return "board/board";
+        memberService.addMember(signupDto);
+        return "home";
     }
 
     @GetMapping("/login")
     public String getLoginForm(Model model) {
-        model.addAttribute("memberDto",new MemberDto());
+        model.addAttribute("loginDto",new LoginDto());
         return "members/login";
     }
 
     @PostMapping("/login")
-    public String login(@Valid MemberDto memberDto){
-        
-        return "redirect:/home";
+    public String login(@Valid LoginDto loginDto, BindingResult bindingResult, Model model){
+        if(bindingResult.hasErrors()){
+            log.info("bindingResult.hasErrors() : {}",bindingResult.getGlobalError().toString());
+            return "members/login";
+        }
+        return "home";
+
     }
 
     // 멤버 조회

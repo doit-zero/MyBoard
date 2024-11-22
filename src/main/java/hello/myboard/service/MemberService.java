@@ -1,6 +1,6 @@
 package hello.myboard.service;
 
-import hello.myboard.dto.MemberDto;
+import hello.myboard.dto.SignupDto;
 import hello.myboard.entity.Board;
 import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
@@ -17,8 +17,8 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public void addMember(MemberDto memberDto) {
-        Member member = new Member(memberDto.getName(),memberDto.getPassword());
+    public void addMember(SignupDto signupDto) {
+        Member member = new Member(signupDto.getName(),signupDto.getPassword());
         memberRepository.save(member);
     }
 
@@ -27,8 +27,12 @@ public class MemberService {
         return findMember.isPresent() ? findMember.get().getBoardList() : null;
     }
 
+    public boolean checkUserExists(String loginDtoName) {
+        return memberRepository.findByName(loginDtoName) != null;
+    }
 
-//    public boolean isNameExists(){
-//        return memberRepository.exists(memberDto);
-//    }
+    public boolean validatePassword(String loginDtoName, String password) {
+        Member findMember = memberRepository.findByName(loginDtoName);
+        return findMember.getPassword().equals(password);
+    }
 }
