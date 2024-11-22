@@ -35,7 +35,7 @@ public class MemberController {
         if(bindingResult.hasErrors()){
             return "members/signup";
         }
-        memberService.addMember(signupDto);
+        memberService.signup(signupDto);
         return "home";
     }
 
@@ -48,9 +48,10 @@ public class MemberController {
     @PostMapping("/login")
     public String login(@Valid LoginDto loginDto, BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
-            log.info("bindingResult.hasErrors() : {}",bindingResult.getGlobalError().toString());
             return "members/login";
         }
+
+        memberService.login(loginDto);
         return "home";
 
     }
