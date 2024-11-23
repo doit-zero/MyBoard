@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Optional;
@@ -46,14 +47,21 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid LoginDto loginDto, BindingResult bindingResult, Model model){
+    public String login(@Valid LoginDto loginDto, BindingResult bindingResult, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
             return "members/login";
         }
 
         memberService.login(loginDto);
-        return "home";
+        redirectAttributes.addAttribute("memberName",loginDto.getName());
+        return "redirect:/";
+    }
 
+    @GetMapping("/logout/{memberName}")
+    public String logout(@PathVariable("memberName") String memberName) {
+        System.out.println(memberName);
+        memberService.logout(memberName);
+        return "redirect:/";
     }
 
     // 멤버 조회

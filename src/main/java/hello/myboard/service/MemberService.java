@@ -9,6 +9,8 @@ import hello.myboard.session.MemberSession;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.Cipher;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MemberService {
 
+    private static final Logger log = LoggerFactory.getLogger(MemberService.class);
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
     //private static final String COOKIE_SESSION_ID = "SESSION_ID";
@@ -55,5 +58,9 @@ public class MemberService {
     public boolean validatePassword(String loginDtoName, String password) {
         Member findMember = memberRepository.findByName(loginDtoName);
         return findMember.getPassword().equals(password);
+    }
+
+    public void logout(String memberName) {
+        httpSession.removeAttribute(memberName);
     }
 }
