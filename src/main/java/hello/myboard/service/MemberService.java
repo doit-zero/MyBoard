@@ -7,6 +7,7 @@ import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
 import hello.myboard.session.MemberSession;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -46,6 +47,13 @@ public class MemberService {
         httpSession.setAttribute(memberSession.getName(), memberSession);
     }
 
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);  // 기존 세션을 가져옴 (없으면 null)
+        if (session != null) {
+            session.invalidate();  // 세션 무효화
+        }
+    }
+
     public List<Board> getBoarList(Long id) {
         Optional<Member> findMember = memberRepository.findById(id);
         return findMember.isPresent() ? findMember.get().getBoardList() : null;
@@ -60,7 +68,4 @@ public class MemberService {
         return findMember.getPassword().equals(password);
     }
 
-    public void logout(String memberName) {
-        httpSession.removeAttribute(memberName);
-    }
 }

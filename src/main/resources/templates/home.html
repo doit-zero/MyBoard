@@ -92,10 +92,9 @@
             <option>100개</option>
             <option>200개</option>
         </select>
-        <button class="write-button">✍ 글쓰기</button>
-        <button class="signup-button" onclick="location.href='/login'">로그인</button>
+        <button class="write-button" onclick="location.href='/write'">✍ 글쓰기</button>
         <!-- 로그인 상태일 때 -->
-        <button th:if="${memberName != null}" th:attr="onclick='location.href=\'/logout/\' + ${memberName}'" class="signup-button">로그아웃</button>
+        <button th:if="${memberName != null}" onclick="location.href='/logout'"class="signup-button">로그아웃</button>
 
         <!-- 로그인 상태가 아닐 때 -->
         <button th:if="${memberName == null}" th:text="'로그인'" class="signup-button" onclick="location.href='/login'"></button>

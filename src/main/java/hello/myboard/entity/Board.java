@@ -2,6 +2,7 @@ package hello.myboard.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,14 @@ public class Board {
         this.member = member;
     }
 
+    public Board(String title, String content,LocalDateTime createdAt, Member member) {
+       this.title = title;
+       this.content = content;
+       this.member = member;
+    }
+
     public void setMember(Member member) {
         this.member = member;
     }
+
 }

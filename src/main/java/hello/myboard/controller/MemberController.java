@@ -6,6 +6,7 @@ import hello.myboard.entity.Board;
 import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
 import hello.myboard.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,16 +52,14 @@ public class MemberController {
         if(bindingResult.hasErrors()){
             return "members/login";
         }
-
         memberService.login(loginDto);
         redirectAttributes.addAttribute("memberName",loginDto.getName());
         return "redirect:/";
     }
 
-    @GetMapping("/logout/{memberName}")
-    public String logout(@PathVariable("memberName") String memberName) {
-        System.out.println(memberName);
-        memberService.logout(memberName);
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request) {
+        memberService.logout(request);
         return "redirect:/";
     }
 
