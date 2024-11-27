@@ -32,9 +32,5 @@ public class HomeController {
         model.addAttribute("boardDtoList",boardDtoList);
         return "home";
     }
-    @GetMapping("/boards")
-    public String boards(Model model){
 
-        return "board";
-    }
 }

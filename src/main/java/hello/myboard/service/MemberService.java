@@ -8,6 +8,7 @@ import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
 import hello.myboard.session.MemberSession;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -37,11 +38,12 @@ public class MemberService {
         httpSession.setAttribute(memberSession.getName(), memberSession);
     }
 
-    public void login(LoginDto loginDto) {
-        MemberSession memberSession = MemberSession.builder()
-                .name(loginDto.getName())
-                .build();
-        httpSession.setAttribute(memberSession.getName(), memberSession);
+
+    public void logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);  // 기존 세션을 가져옴 (없으면 null)
+        if (session != null) {
+            session.invalidate();  // 세션 무효화
+        }
     }
 
     public List<Board> getBoarList(Long id) {
@@ -66,6 +68,7 @@ public class MemberService {
         Member findMember = memberRepository.findByName(memberName);
         List<Board> boardList = findMember.getBoardList();
         List<BoardDto> boardDtoList = new ArrayList<>();
+
         for (Board board : boardList) {
             BoardDto boardDto = BoardDto.builder()
                     .id(board.getId())

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>글쓰기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #333;
+            background-color: #f9f9f9;
+            margin-top: 5px;
+        }
+
+        .input-group input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        .input-group button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .input-group button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+<h2>글쓰기</h2>
+<form action="#" th:action="@{/write}" method="post" th:object="${boardWriteDto}">
+    <div class="input-group">
+        <label>제목</label>
+        <input th:field="*{title}" placeholder="제목 입력"required>
+
+    </div>
+    <div class="input-group">
+        <label>내용</label>
+        <input th:field="*{content}" placeholder="비밀번호를 입력하세요" required>
+    </div>
+
+    <div class="input-group">
+        <button type="submit">등록</button>
+    </div>
+
+    <div class="input-group">
+        <button class="write-button" onclick="location.href='/home'">취소</button>
+    </div>
+</form>
+</body>
+</html>
