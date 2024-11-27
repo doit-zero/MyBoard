@@ -1,5 +1,6 @@
 package hello.myboard.service;
 
+import hello.myboard.dto.BoardDto;
 import hello.myboard.dto.SignupDto;
 import hello.myboard.dto.member.LoginDto;
 import hello.myboard.entity.Board;
@@ -16,10 +17,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import java.security.*;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +60,24 @@ public class MemberService {
 
     public void logout(String memberName) {
         httpSession.removeAttribute(memberName);
+    }
+
+    public List<BoardDto> getMyBoardList(String memberName) {
+        Member findMember = memberRepository.findByName(memberName);
+        List<Board> boardList = findMember.getBoardList();
+        List<BoardDto> boardDtoList = new ArrayList<>();
+        for (Board board : boardList) {
+            BoardDto boardDto = BoardDto.builder()
+                    .id(board.getId())
+                    .member(board.getMember())
+                    .title(board.getTitle())
+                    .createdAt(board.getCreatedAt())
+                    .views(board.getLikes())
+                    .likes(board.getLikes())
+                    .build();
+            boardDtoList.add(boardDto);
+        }
+
+        return boardDtoList;
     }
 }

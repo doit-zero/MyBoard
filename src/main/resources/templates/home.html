@@ -95,16 +95,16 @@
         <button class="write-button">✍ 글쓰기</button>
         <button class="signup-button" onclick="location.href='/login'">로그인</button>
         <!-- 로그인 상태일 때 -->
-        <button th:if="${memberName != null}" th:attr="onclick='location.href=\'/logout/\' + ${memberName}'" class="signup-button">로그아웃</button>
+       <button th:if="${memberName != null}" th:attr="onclick='location.href=\'/logout/\' + ${memberName}'" class="signup-button">로그아웃</button>
 
         <!-- 로그인 상태가 아닐 때 -->
-        <button th:if="${memberName == null}" th:text="'로그인'" class="signup-button" onclick="location.href='/login'"></button>
+       <button th:if="${memberName == null}" th:text="'로그인'" class="signup-button" onclick="location.href='/login'"></button>
 
         <!-- 내가 쓴 글 보기 버튼 (로그인 상태일 때만 보이게) -->
-        <button th:if="${memberName != null}" th:text="'내가 쓴 글 보기'" class="signup-button" onclick="location.href='/my-posts'"></button>
+        <button th:if="${memberName != null}" th:text="'내가 쓴 글 보기'" class="signup-button" onclick="location.href='/members/boarList'"></button>
+
     </div>
 </div>
-
 
 <table>
     <thead>

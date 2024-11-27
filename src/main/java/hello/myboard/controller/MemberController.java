@@ -1,5 +1,6 @@
 package hello.myboard.controller;
 
+import hello.myboard.dto.BoardDto;
 import hello.myboard.dto.SignupDto;
 import hello.myboard.dto.member.LoginDto;
 import hello.myboard.entity.Board;
@@ -15,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,15 +27,16 @@ public class MemberController {
 
     private final MemberRepository memberRepository;
     private final MemberService memberService;
+
     @GetMapping("/members")
     public String getSignupForm(Model model) {
-        model.addAttribute("signupDto",new SignupDto());
+        model.addAttribute("signupDto", new SignupDto());
         return "members/signup";
     }
 
     @PostMapping("/members")
     public String signup(@Valid SignupDto signupDto, BindingResult bindingResult, Model model) {
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             return "members/signup";
         }
         memberService.signup(signupDto);
@@ -42,18 +45,18 @@ public class MemberController {
 
     @GetMapping("/login")
     public String getLoginForm(Model model) {
-        model.addAttribute("loginDto",new LoginDto());
+        model.addAttribute("loginDto", new LoginDto());
         return "members/login";
     }
 
     @PostMapping("/login")
-    public String login(@Valid LoginDto loginDto, BindingResult bindingResult, RedirectAttributes redirectAttributes){
-        if(bindingResult.hasErrors()){
+    public String login(@Valid LoginDto loginDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
             return "members/login";
         }
 
         memberService.login(loginDto);
-        redirectAttributes.addAttribute("memberName",loginDto.getName());
+        redirectAttributes.addAttribute("memberName", loginDto.getName());
         return "redirect:/";
     }
 
@@ -74,12 +77,15 @@ public class MemberController {
     }
 
     // 멤버가 쓴 글 가져오기
-    @GetMapping("/members/{id}/boarList")
-    public String getBoarList(@PathVariable Long id,Model model) {
-        Optional<Member> findMember = memberRepository.findById(id);
-        List<Board> boarList = memberService.getBoarList(id);
-        model.addAttribute("boarList", boarList);
-        return "members/boarList";
+    @GetMapping("/members/boarList")
+    //public String getMyBoarList(@RequestParam String memberName,Model model) {
+    public String getMyBoarList(Model model) {
+        //test용
+        String memberName = "test4";
+
+        List<BoardDto> myBoardList = memberService.getMyBoardList(memberName);
+        model.addAttribute("myBoardList", myBoardList);
+        return "members/boardList";
     }
 
 }
