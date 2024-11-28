@@ -96,6 +96,17 @@
         .notice {
             background-color: #ffeecc;
         }
+
+         .pagination a {
+             margin: 0 5px;
+             text-decoration: none;
+             color: black;
+         }
+        .pagination a.active {
+            font-weight: bold;
+            text-decoration: underline;
+            color: blue;
+        }
     </style>
 </head>
 <body>
@@ -133,15 +144,32 @@
     </thead>
     <tbody>
     <!-- 게시판 목록 반복 -->
-    <tr th:each="post : ${posts}">
-        <td th:text="${post.id}"></td>
-        <td th:text="${post.title}"></td>
-        <td th:text="${post.author}"></td>
-        <td th:text="${post.date}"></td>
-        <td th:text="${post.views}"></td>
-        <td th:text="${post.recommendations}"></td>
+    <tr th:each="content : ${contentPage.content}">
+        <td th:text="${content.getId()}"></td>
+        <td th:text="${content.getMember().getName()}"></td>
+        <td th:text="${content.getTitle()}"></td>
+        <td th:text="${content.getCreatedAt()}"></td>
+        <td th:text="${content.getViews()}"></td>
+        <td th:text="${content.getLikes()}"></td>
     </tr>
     </tbody>
 </table>
+
+<div class="pagination">
+    <!-- 이전 버튼 -->
+    <a th:href="@{/contents(page=${contentPage.number - 1}, size=${contentPage.size})}"
+       th:if="${contentPage.hasPrevious()}">Previous</a>
+
+    <!-- 페이지 번호 버튼 -->
+    <span th:each="i : ${#numbers.sequence(0, contentPage.totalPages - 1)}">
+        <a th:href="@{/contents(page=${i}, size=${contentPage.size})}"
+           th:classappend="${i == contentPage.number} ? 'active'"
+           th:text="${i + 1}"></a>
+    </span>
+
+    <!-- 다음 버튼 -->
+    <a th:href="@{/contents(page=${contentPage.number + 1}, size=${contentPage.size})}"
+       th:if="${contentPage.hasNext()}">Next</a>
+</div>
 </body>
 </html>

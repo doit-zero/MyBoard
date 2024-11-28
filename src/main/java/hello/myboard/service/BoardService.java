@@ -8,6 +8,9 @@ import hello.myboard.repository.BoardRepository;
 import hello.myboard.repository.MemberRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -47,4 +50,9 @@ public class BoardService {
         return true;
     }
 
+    public Page<Board> getContents(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Board> contents = boardRepository.findAll(pageable);
+        return contents;
+    }
 }

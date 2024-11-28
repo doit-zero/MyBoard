@@ -11,6 +11,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,11 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.*;
 import java.util.*;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
-    private static final Logger log = LoggerFactory.getLogger(MemberService.class);
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
     //private static final String COOKIE_SESSION_ID = "SESSION_ID";
@@ -38,6 +39,12 @@ public class MemberService {
         httpSession.setAttribute(memberSession.getName(), memberSession);
     }
 
+    public void login(LoginDto loginDto) {
+        MemberSession memberSession = MemberSession.builder()
+                .name(loginDto.getName())
+                .build();
+        httpSession.setAttribute(memberSession.getName(), memberSession);
+    }
 
     public void logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);  // 기존 세션을 가져옴 (없으면 null)
@@ -60,15 +67,10 @@ public class MemberService {
         return findMember.getPassword().equals(password);
     }
 
-    public void logout(String memberName) {
-        httpSession.removeAttribute(memberName);
-    }
-
     public List<BoardDto> getMyBoardList(String memberName) {
         Member findMember = memberRepository.findByName(memberName);
         List<Board> boardList = findMember.getBoardList();
         List<BoardDto> boardDtoList = new ArrayList<>();
-
         for (Board board : boardList) {
             BoardDto boardDto = BoardDto.builder()
                     .id(board.getId())
@@ -83,4 +85,5 @@ public class MemberService {
 
         return boardDtoList;
     }
+
 }
