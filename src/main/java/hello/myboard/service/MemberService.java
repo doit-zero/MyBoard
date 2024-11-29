@@ -28,7 +28,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final HttpSession httpSession;
-    //private static final String COOKIE_SESSION_ID = "SESSION_ID";
+    public static final String SESSION_ID = "sessioIdBymemberId";
     public void signup(SignupDto signupDto) {
         Member member = new Member(signupDto.getName(),signupDto.getPassword());
         Member savedMember = memberRepository.save(member);
@@ -36,14 +36,15 @@ public class MemberService {
         MemberSession memberSession = MemberSession.builder()
                 .name(savedMember.getName())
                 .build();
-        httpSession.setAttribute(memberSession.getName(), memberSession);
+        httpSession.setAttribute(SESSION_ID, memberSession);
     }
+
 
     public void login(LoginDto loginDto) {
         MemberSession memberSession = MemberSession.builder()
                 .name(loginDto.getName())
                 .build();
-        httpSession.setAttribute(memberSession.getName(), memberSession);
+        httpSession.setAttribute(SESSION_ID, memberSession);
     }
 
     public void logout(HttpServletRequest request) {
@@ -67,22 +68,26 @@ public class MemberService {
         return findMember.getPassword().equals(password);
     }
 
-    public List<BoardDto> getMyBoardList(String memberName) {
-        Member findMember = memberRepository.findByName(memberName);
+    public List<BoardDto> getMyBoardList() {
+        MemberSession memberSession = (MemberSession)httpSession.getAttribute(SESSION_ID);
+        Member findMember = memberRepository.findByName(memberSession.getName());
+
         List<Board> boardList = findMember.getBoardList();
         List<BoardDto> boardDtoList = new ArrayList<>();
-        for (Board board : boardList) {
-            BoardDto boardDto = BoardDto.builder()
-                    .id(board.getId())
-                    .member(board.getMember())
-                    .title(board.getTitle())
-                    .createdAt(board.getCreatedAt())
-                    .views(board.getLikes())
-                    .likes(board.getLikes())
-                    .build();
-            boardDtoList.add(boardDto);
-        }
 
+        if(boardList.size() > 0) {
+            for (Board board : boardList) {
+                BoardDto boardDto = BoardDto.builder()
+                        .id(board.getId())
+                        .member(board.getMember())
+                        .title(board.getTitle())
+                        .createdAt(board.getCreatedAt())
+                        .views(board.getLikes())
+                        .likes(board.getLikes())
+                        .build();
+                boardDtoList.add(boardDto);
+            }
+        }
         return boardDtoList;
     }
 

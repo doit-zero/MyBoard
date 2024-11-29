@@ -7,6 +7,7 @@ import hello.myboard.entity.Board;
 import hello.myboard.entity.Member;
 import hello.myboard.repository.MemberRepository;
 import hello.myboard.service.MemberService;
+import hello.myboard.validation.annotation.LoginValidation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -51,12 +52,11 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid LoginDto loginDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+    public String login(@Valid LoginDto loginDto, BindingResult bindingResult, Model model) {
         if (bindingResult.hasErrors()) {
             return "members/login";
         }
         memberService.login(loginDto);
-        redirectAttributes.addAttribute("memberName", loginDto.getName());
         return "redirect:/";
     }
 
@@ -79,10 +79,7 @@ public class MemberController {
     @GetMapping("/members/boarList")
     //public String getMyBoarList(@RequestParam String memberName,Model model) {
     public String getMyBoarList(Model model) {
-        //test용
-        String memberName = "test4";
-
-        List<BoardDto> myBoardList = memberService.getMyBoardList(memberName);
+        List<BoardDto> myBoardList = memberService.getMyBoardList();
         model.addAttribute("myBoardList", myBoardList);
         return "members/boardList";
     }
